@@ -35,7 +35,7 @@ After you have arranged text nodes in order and linked them up, ask your favouri
 * Chat Export: Save chats as text or Markdown
 
 ### User Experience
-* Intuitive Interface: Split-panel design with canvas, collapsable text viewer and collapsable chat panels
+* Intuitive Interface: Split-panel design with canvas, collapsible text viewer and collapsible chat panels
 * Zoom & Pan: Navigate large knowledge maps with zoom and pan functionality
 * Keyboard Shortcuts: Efficient editing with shortcuts for common operations
 * State Persistence: The app remembers window positions, sizes, and layout preferences
