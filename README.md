@@ -63,13 +63,14 @@ Dou is built with:
 * Support for mouse, keyboard, and tablet input devices
 
 ## Getting Started
-1. Launch Dou directly via the Terminal or build an executable for macOS, Windows or Linux with Pyinstaller
-2. Double-click anywhere on the canvas to create a new node
-3. Type your content into the node or text editor panel
-4. Create additional nodes and connect them by dragging from the connection points
-5. Use the chat panel to analyse your notes with AI
-6. Save your project using File → Save Project
-7. Easy to remember controls. Double click to create or edit a text node. Right click to pan the canvas. Command/CTRL + or - to zoom in or out.
+1. Install PySide6 with pip install pyside6
+2. Launch Dou directly via the Terminal or build an executable for macOS, Windows or Linux with Pyinstaller
+3. Double-click anywhere on the canvas to create a new node
+4. Type your content into the node or text editor panel
+5. Create additional nodes and connect them by dragging from the connection points
+6. Use the chat panel to analyse your notes with AI
+7. Save your project using File → Save Project
+8. Easy to remember controls. Double click to create or edit a text node. Right click to pan the canvas. Command/CTRL + or - to zoom in or out.
 
 ---
 *Dou by Shokunin Studio © 2025*
