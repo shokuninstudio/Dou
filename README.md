@@ -13,7 +13,7 @@ After you have arranged text nodes in order and linked them up, ask your favouri
 ## Features
 
 ### Visual Node Canvas
-* Interactive Sticky Notes: Create, edit, and organize thoughts as sticky note nodes on a flexible canvas (right click to pan or use the arrow keys)
+* Interactive sticky notes: Create, edit, and organize thoughts as sticky note nodes on a flexible canvas (right click to pan or use the arrow keys)
 * Node Connections: Connect related ideas to form logical paths and sequences
 * Visual Organization: Position nodes spatially to represent relationships and hierarchies
 * Color Coding: Assign different colors to nodes (Red, Orange, Yellow, Green, Blue, Purple, Light Grey) for visual categorisation
@@ -41,7 +41,7 @@ After you have arranged text nodes in order and linked them up, ask your favouri
 * State Persistence: The app remembers window positions, sizes, and layout preferences
 
 ### Accessibility
-* Text-to-Speech (macOS only): Listen to your notes and AI responses with built-in speech synthesis (uses macOS Spoken Content settings)
+* Text-to-Speech (macOS only): Listen to the chat with built-in speech synthesis (uses macOS Spoken Content settings)
 * Tablet Support: Optimized for stylus input on tablets for natural note-taking
 * Path Visualization: Clear visual indication of connected ideas and concepts
 
