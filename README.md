@@ -69,6 +69,7 @@ Dou is built with:
 4. Create additional nodes and connect them by dragging from the connection points
 5. Use the chat panel to analyse your notes with AI
 6. Save your project using File → Save Project
+7. Easy to remember controls. Double click to create or edit a text node. Right click to pan the canvas. Command/CTRL + or - to zoom in or out.
 
 ---
 *Dou by Shokunin Studio © 2025*
