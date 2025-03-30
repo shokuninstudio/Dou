@@ -1,0 +1,117 @@
+{
+  "nodes": {
+    "4460634048": {
+      "title": "Saturday.",
+      "text": "Saturday.\n\nThis path is for my personal medical and nutritional records. It is my weekend activities.\n\n",
+      "pos_x": -955.5,
+      "pos_y": -163.25,
+      "width": 250,
+      "height": 300,
+      "color": "Orange",
+      "order_number": 8
+    },
+    "4460633280": {
+      "title": "For lunch I ate a 125 gram ste",
+      "text": "For lunch I ate a 125 gram steak with fries and salad. For desert I had an apple pie. It was around 200 grams in weight.",
+      "pos_x": -309.49999999999994,
+      "pos_y": -151.5,
+      "width": 250,
+      "height": 300,
+      "color": "Orange",
+      "order_number": 7
+    },
+    "4460628224": {
+      "title": "This morning I took one parace",
+      "text": "This morning I took one paracetamol and two Cod Liver Oil tablets as recommended by the doctor with breakfast of ham and cheese croissant and a cappucino.\n\nWe went shopping around town for two hours by foot. I estimate we walked three miles total.",
+      "pos_x": -628.75,
+      "pos_y": -226.5,
+      "width": 250,
+      "height": 300,
+      "color": "Orange",
+      "order_number": 6
+    },
+    "4460536896": {
+      "title": "We played badminton for one ho",
+      "text": "We played badminton for one hour in the evening.\n\nAfter dinner I ate a 12 inch quattro stagione pizza, thin crust and half a pint of beer.",
+      "pos_x": 19.0,
+      "pos_y": -227.5,
+      "width": 250,
+      "height": 300,
+      "color": "Orange",
+      "order_number": 5
+    },
+    "4445291072": {
+      "title": "For dinner we went out and ate",
+      "text": "For dinner we went out and ate vegetarian (steamed rice and vegetables with miso soup).",
+      "pos_x": -2.5,
+      "pos_y": -700.75,
+      "width": 250,
+      "height": 300,
+      "color": "Yellow",
+      "order_number": 4
+    },
+    "4460452544": {
+      "title": "",
+      "text": "\nFor lunch I had Tonkotsu ramen (onion, garlic, spring onions, ginger,sliced pork belly, noodles)",
+      "pos_x": -338.49999999999994,
+      "pos_y": -624.75,
+      "width": 250,
+      "height": 300,
+      "color": "Yellow",
+      "order_number": 3
+    },
+    "4397380608": {
+      "title": "This morning I took one codein",
+      "text": "This morning I took one codeine and two Cod Liver Oil tablets as recommended by the doctor with breakfast of two scrambled eggs on toast, black coffee and a small chocolate.",
+      "pos_x": -646.5,
+      "pos_y": -699.75,
+      "width": 250,
+      "height": 300,
+      "color": "Yellow",
+      "order_number": 2
+    },
+    "4445636480": {
+      "title": "Friday.",
+      "text": "Friday.\n\nThis path is for my personal medical and nutritional records. Every week day I edit it for your feedback and suggestions.\n\n",
+      "pos_x": -975.75,
+      "pos_y": -636.5,
+      "width": 250,
+      "height": 300,
+      "color": "Yellow",
+      "order_number": 1
+    }
+  },
+  "connections": [
+    {
+      "start_node": "4445636480",
+      "end_node": "4397380608",
+      "edge_type": "right"
+    },
+    {
+      "start_node": "4397380608",
+      "end_node": "4460452544",
+      "edge_type": "right"
+    },
+    {
+      "start_node": "4460452544",
+      "end_node": "4445291072",
+      "edge_type": "right"
+    },
+    {
+      "start_node": "4460634048",
+      "end_node": "4460628224",
+      "edge_type": "right"
+    },
+    {
+      "start_node": "4460628224",
+      "end_node": "4460633280",
+      "edge_type": "right"
+    },
+    {
+      "start_node": "4460633280",
+      "end_node": "4460536896",
+      "edge_type": "right"
+    }
+  ],
+  "version": "1.0"
+}
