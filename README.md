@@ -72,6 +72,7 @@ Dou is built with:
 7. Save your project using File → Save Project
 8. Easy to remember controls. Double click to create or edit a text node. Right click to pan the canvas. Command/CTRL + or - to zoom in or out.
 
+(Quick note : I'm still testing dark mode consistency on different operating systems.)
 ---
 *Dou by Shokunin Studio © 2025*
 
