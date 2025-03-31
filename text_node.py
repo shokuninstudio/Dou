@@ -79,7 +79,7 @@ class TextNode(QGraphicsItem):
         if self.isSelected():
             painter.setPen(QPen(QColor(0, 120, 215), 4))  # Keep blue border for selection
         else:
-            painter.setPen(QPen(QColor(200, 200, 100), 1))
+            painter.setPen(Qt.NoPen)  # Remove border when not selected
         
         # Always use sticky_color for background, regardless of editing state
         painter.setBrush(self.sticky_color)
@@ -207,6 +207,7 @@ class TextNode(QGraphicsItem):
                                         {self.sticky_color.green()}, 
                                         {self.sticky_color.blue()});
                     border: none;
+                    color: black;
                 }}
             """)
         
