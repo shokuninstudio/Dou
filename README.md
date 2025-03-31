@@ -8,7 +8,7 @@ A path can be anything you want it to be. Your daily diet, a mood or health trac
 
 After you have arranged text nodes in order and linked them up, ask your favourite Ollama hosted large language model for feedback, summaries and more.
 
-[![temp-Imaged-VQlo-A.avif](https://i.postimg.cc/4NQ4xNFq/temp-Imaged-VQlo-A.avif)](https://postimg.cc/0br1txv0)
+[![temp-Image4-Weckl.avif](https://i.postimg.cc/FFqXxp9V/temp-Image4-Weckl.avif)](https://postimg.cc/s1pLjpGM)
 
 ## Features
 
