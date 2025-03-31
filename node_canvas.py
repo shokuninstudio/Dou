@@ -61,6 +61,8 @@ class NodeCanvas(QGraphicsView):
     def __init__(self):
         super().__init__()
         self.scene = QGraphicsScene()
+        # Create a very large scene to enable infinite panning
+        self.scene.setSceneRect(-100000, -100000, 200000, 200000)
         self.setScene(self.scene)
         self.setRenderHint(QPainter.Antialiasing)
         
