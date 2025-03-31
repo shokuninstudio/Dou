@@ -6,6 +6,8 @@ import json
 import subprocess
 import threading
 import platform
+import markdown  # Add this import
+import re  # Add this import for regex pattern matching
 
 class ChatPanel(QWidget):
     def __init__(self, canvas):
@@ -53,11 +55,13 @@ class ChatPanel(QWidget):
         chat_layout = QVBoxLayout(chat_frame)
         chat_layout.setContentsMargins(5, 5, 5, 5)
         
-        self.chat_display = QTextEdit()
+        # Replace QTextEdit with QTextBrowser for proper link support
+        self.chat_display = QTextBrowser()
         self.chat_display.setReadOnly(True)
         self.chat_display.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.chat_display.setMinimumHeight(180)  # Adjusted height
         self.chat_display.setFrameStyle(QFrame.NoFrame)
+        self.chat_display.setOpenExternalLinks(True)  # Now this works
         chat_layout.addWidget(self.chat_display)
         
         layout.addWidget(chat_frame)
@@ -107,11 +111,11 @@ class ChatPanel(QWidget):
                 self.model_selector.clear()
                 for model in models:
                     self.model_selector.addItem(model['name'])
-                self.chat_display.append("Models refreshed successfully")
+                self.add_to_chat("Models refreshed successfully")
             else:
-                self.chat_display.append("Error: Could not fetch models")
+                self.add_to_chat("Error: Could not fetch models")
         except Exception as e:
-            self.chat_display.append(f"Error connecting to Ollama: {str(e)}\nMake sure Ollama is running (ollama serve)")
+            self.add_to_chat(f"Error connecting to Ollama: {str(e)}\nMake sure Ollama is running (ollama serve)")
             
     def update_path_list(self):
         self.path_selector.clear()
@@ -143,18 +147,45 @@ class ChatPanel(QWidget):
                                  for node in path)
             return ""
     
+    def add_to_chat(self, text, is_markdown=False, add_newline=True):
+        """Add text to chat display, with optional markdown rendering"""
+        cursor = self.chat_display.textCursor()
+        cursor.movePosition(QTextCursor.End)
+        self.chat_display.setTextCursor(cursor)
+        
+        if is_markdown:
+            # Convert markdown to HTML with code highlighting
+            html = markdown.markdown(
+                text, 
+                extensions=['fenced_code', 'tables', 'nl2br']
+            )
+            self.chat_display.insertHtml(html)
+        else:
+            self.chat_display.insertPlainText(text)
+        
+        # Add a line break only if requested
+        if add_newline:
+            cursor.movePosition(QTextCursor.End)
+            self.chat_display.setTextCursor(cursor)
+            self.chat_display.insertPlainText("\n")
+        
+        # Ensure new text is visible
+        self.chat_display.verticalScrollBar().setValue(
+            self.chat_display.verticalScrollBar().maximum()
+        )
+        
     def send_message(self):
         message = self.input_field.text()
         if not message:
             return
             
         if not self.model_selector.currentText():
-            self.chat_display.append("Error: No model selected. Please refresh models.")
-            self.chat_display.append("")  # Add empty line after error
+            self.add_to_chat("Error: No model selected. Please refresh models.")
+            self.add_to_chat("")  # Add empty line after error
             return
             
-        self.chat_display.append(f"You: {message}")
-        self.chat_display.append("")  # Add empty line after user message
+        self.add_to_chat(f"You: {message}")
+        self.add_to_chat("")  # Add empty line after user message
         self.input_field.clear()
         self.send_button.setEnabled(False)
         
@@ -168,7 +199,7 @@ class ChatPanel(QWidget):
 
 User question: {message}
 
-Please analyze the provided text and answer the question."""
+Please analyze the provided text and answer the question. You can use markdown formatting in your response."""
         
         try:
             response = requests.post('http://localhost:11434/api/generate', 
@@ -180,38 +211,90 @@ Please analyze the provided text and answer the question."""
                 stream=True
             )
             
-            self.chat_display.append("Computer says: ")
+            # Add "Computer says:" without a line break
+            self.add_to_chat("Computer says: ", add_newline=False)
+            
+            # Get position right after "Computer says: "
+            cursor = self.chat_display.textCursor()
+            cursor.movePosition(QTextCursor.End)
+            response_position = cursor.position()
             current_response = ""
             
             for line in response.iter_lines():
                 if line:
                     json_response = json.loads(line)
                     if 'error' in json_response:
-                        self.chat_display.append(f"Error: {json_response['error']}")
-                        self.chat_display.append("")  # Add empty line after error
+                        self.add_to_chat(f"Error: {json_response['error']}")
+                        self.add_to_chat("")
                         break
                     
-                    # Update chat display with better scroll handling
-                    cursor = self.chat_display.textCursor()
-                    cursor.movePosition(QTextCursor.End)
-                    self.chat_display.setTextCursor(cursor)
-                    self.chat_display.insertPlainText(json_response['response'])
+                    # Append new content and re-render the whole response
+                    current_response += json_response['response']
                     
-                    # Ensure new text is visible
+                    # Clean up orphaned bullet points
+                    cleaned_response = self.clean_orphaned_bullet_points(current_response)
+                    
+                    # Convert to HTML
+                    html = markdown.markdown(
+                        cleaned_response, 
+                        extensions=['fenced_code', 'tables', 'nl2br']
+                    )
+                    
+                    # Explicitly close any open lists with a non-list element
+                    if html.endswith("</li></ul>") or html.endswith("</li></ol>"):
+                        html += "<div></div>"
+                    
+                    # Remove previous response and insert updated HTML
+                    cursor = self.chat_display.textCursor()
+                    cursor.setPosition(response_position)
+                    cursor.movePosition(QTextCursor.End, QTextCursor.KeepAnchor)
+                    cursor.removeSelectedText()
+                    self.chat_display.setTextCursor(cursor)
+                    self.chat_display.insertHtml(html)
+                    
+                    # Scroll to see latest content
                     self.chat_display.verticalScrollBar().setValue(
                         self.chat_display.verticalScrollBar().maximum()
                     )
+                    
                     QApplication.processEvents()
             
-            # Add empty line after AI response
-            self.chat_display.append("")
+            # Add empty line after response with a paragraph break to isolate from future messages
+            self.add_to_chat("")
+            
+            # Add an explicit HTML separator to prevent continuation of lists
+            cursor = self.chat_display.textCursor()
+            cursor.movePosition(QTextCursor.End)
+            self.chat_display.setTextCursor(cursor)
+            self.chat_display.insertHtml("<div style='margin-top:10px'></div>")
                     
         except Exception as e:
-            self.chat_display.append(f"Error: Could not connect to Ollama - {str(e)}")
-            self.chat_display.append("")  # Add empty line after error
+            self.add_to_chat(f"Error: Could not connect to Ollama - {str(e)}")
+            self.add_to_chat("")
             
         finally:
             self.send_button.setEnabled(True)
+
+    def clean_orphaned_bullet_points(self, text):
+        """Clean up orphaned bullet points at the end of responses"""
+        
+        # Check for common patterns of orphaned bullet points:
+        # 1. Lines ending with "* " or "- " (markdown bullet)
+        # 2. Lines ending with a number followed by a period and space (numbered list)
+        
+        # Check if the text ends with a markdown bullet point without content
+        if text.endswith("\n* ") or text.endswith("\n- "):
+            return text[:-3]  # Remove the last 3 chars ("* " or "- " with newline)
+        elif text.endswith("* ") or text.endswith("- "):
+            return text[:-2]  # Remove the last 2 chars ("* " or "- " without newline)
+        
+        # Check for numbered list items (e.g., "1. ")
+        lines = text.split("\n")
+        if lines and lines[-1].strip() and re.match(r'^\d+\.\s+$', lines[-1]):
+            lines.pop()  # Remove the last line if it's just a numbered list marker
+            return "\n".join(lines)
+        
+        return text
     
     def clear_chat(self):
         """Clear the chat display"""
@@ -232,7 +315,7 @@ Please analyze the provided text and answer the question."""
                 is_markdown = selected_filter == "Markdown Files (*.md)" or filename.lower().endswith('.md')
                 
                 if is_markdown:
-                    # Save as markdown with formatting
+                    # For markdown files, preserve the markdown formatting
                     content = self.chat_display.toPlainText()
                     formatted_content = ""
                     
@@ -248,7 +331,7 @@ Please analyze the provided text and answer the question."""
                         # Format computer responses
                         elif line.startswith("Computer says:"):
                             formatted_content += f"**{line}**\n\n"
-                            # Collect the multi-line response
+                            # The response is already in markdown format, preserve it
                             i += 1
                             response_text = ""
                             while i < len(lines) and not (lines[i].startswith("You:") or 
@@ -268,7 +351,7 @@ Please analyze the provided text and answer the question."""
                     with open(filename, 'w', encoding='utf-8') as file:
                         file.write(formatted_content)
                 else:
-                    # Save as plain text (original behavior)
+                    # For text files, get plain text (strips markdown formatting)
                     with open(filename, 'w', encoding='utf-8') as file:
                         file.write(self.chat_display.toPlainText())
                         
