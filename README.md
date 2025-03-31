@@ -63,7 +63,7 @@ Dou is built with:
 * Support for mouse, keyboard, and tablet input devices
 
 ## Getting Started
-1. Install PySide6 with pip install pyside6
+1. Install PySide6 with 'pip install pyside6 markdown'
 2. Launch Dou directly via the Terminal or build an executable for macOS, Windows or Linux with Pyinstaller
 3. Double-click anywhere on the canvas to create a new text node, double click a text node to edit them
 4. Import a text file as a node
