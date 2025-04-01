@@ -6,8 +6,8 @@ import json
 import subprocess
 import threading
 import platform
-import markdown  # Add this import
-import re  # Add this import for regex pattern matching
+import markdown
+import re
 
 class ChatPanel(QWidget):
     def __init__(self, canvas):
@@ -29,6 +29,13 @@ class ChatPanel(QWidget):
         
         # Add some spacing between controls
         controls_layout.addSpacing(20)
+        
+        # Add LLM server selector
+        controls_layout.addWidget(QLabel("Server:"))
+        self.server_selector = QComboBox()
+        self.server_selector.addItems(["Ollama", "LM Studio"])
+        self.server_selector.currentTextChanged.connect(self.fetch_models)
+        controls_layout.addWidget(self.server_selector)
         
         # Model controls
         controls_layout.addWidget(QLabel("Model:"))
@@ -100,22 +107,46 @@ class ChatPanel(QWidget):
 
         layout.addWidget(input_frame)
         
+        # Define server endpoints
+        self.server_endpoints = {
+            "Ollama": "http://localhost:11434",
+            "LM Studio": "http://127.0.0.1:1234"
+        }
+        
         # Initial model fetch
         self.fetch_models()
         
     def fetch_models(self):
-        try:
-            response = requests.get('http://localhost:11434/api/tags')
-            if response.status_code == 200:
-                models = response.json()['models']
-                self.model_selector.clear()
-                for model in models:
-                    self.model_selector.addItem(model['name'])
-                self.add_to_chat("Models refreshed successfully")
-            else:
-                self.add_to_chat("Error: Could not fetch models")
-        except Exception as e:
-            self.add_to_chat(f"Error connecting to Ollama: {str(e)}\nMake sure Ollama is running (ollama serve)")
+        selected_server = self.server_selector.currentText()
+        
+        if selected_server == "Ollama":
+            try:
+                response = requests.get(f'{self.server_endpoints["Ollama"]}/api/tags')
+                if response.status_code == 200:
+                    models = response.json()['models']
+                    self.model_selector.clear()
+                    for model in models:
+                        self.model_selector.addItem(model['name'])
+                    self.add_to_chat("Ollama models refreshed successfully")
+                else:
+                    self.add_to_chat("Error: Could not fetch Ollama models")
+            except Exception as e:
+                self.add_to_chat(f"Error connecting to Ollama: {str(e)}\nMake sure Ollama is running (ollama serve)")
+        
+        elif selected_server == "LM Studio":
+            try:
+                # LM Studio models endpoint
+                response = requests.get(f'{self.server_endpoints["LM Studio"]}/v1/models')
+                if response.status_code == 200:
+                    models = response.json()['data']
+                    self.model_selector.clear()
+                    for model in models:
+                        self.model_selector.addItem(model['id'])
+                    self.add_to_chat("LM Studio models refreshed successfully")
+                else:
+                    self.add_to_chat("Error: Could not fetch LM Studio models")
+            except Exception as e:
+                self.add_to_chat(f"Error connecting to LM Studio: {str(e)}\nMake sure LM Studio is running with local server enabled")
             
     def update_path_list(self):
         self.path_selector.clear()
@@ -201,16 +232,10 @@ User question: {message}
 
 Please analyze the provided text and answer the question. You can use markdown formatting in your response."""
         
+        selected_server = self.server_selector.currentText()
+        selected_model = self.model_selector.currentText()
+        
         try:
-            response = requests.post('http://localhost:11434/api/generate', 
-                json={
-                    'model': self.model_selector.currentText(),
-                    'prompt': full_prompt,
-                    'stream': True
-                },
-                stream=True
-            )
-            
             # Add "Computer says:" without a line break
             self.add_to_chat("Computer says: ", add_newline=False)
             
@@ -220,60 +245,119 @@ Please analyze the provided text and answer the question. You can use markdown f
             response_position = cursor.position()
             current_response = ""
             
-            for line in response.iter_lines():
-                if line:
-                    json_response = json.loads(line)
-                    if 'error' in json_response:
-                        self.add_to_chat(f"Error: {json_response['error']}")
-                        self.add_to_chat("")
-                        break
-                    
-                    # Append new content and re-render the whole response
-                    current_response += json_response['response']
-                    
-                    # Clean up orphaned bullet points
-                    cleaned_response = self.clean_orphaned_bullet_points(current_response)
-                    
-                    # Convert to HTML
-                    html = markdown.markdown(
-                        cleaned_response, 
-                        extensions=['fenced_code', 'tables', 'nl2br']
-                    )
-                    
-                    # Explicitly close any open lists with a non-list element
-                    if html.endswith("</li></ul>") or html.endswith("</li></ol>"):
-                        html += "<div></div>"
-                    
-                    # Remove previous response and insert updated HTML
-                    cursor = self.chat_display.textCursor()
-                    cursor.setPosition(response_position)
-                    cursor.movePosition(QTextCursor.End, QTextCursor.KeepAnchor)
-                    cursor.removeSelectedText()
-                    self.chat_display.setTextCursor(cursor)
-                    self.chat_display.insertHtml(html)
-                    
-                    # Scroll to see latest content
-                    self.chat_display.verticalScrollBar().setValue(
-                        self.chat_display.verticalScrollBar().maximum()
-                    )
-                    
-                    QApplication.processEvents()
+            if selected_server == "Ollama":
+                response = requests.post(f'{self.server_endpoints["Ollama"]}/api/generate', 
+                    json={
+                        'model': selected_model,
+                        'prompt': full_prompt,
+                        'stream': True
+                    },
+                    stream=True
+                )
+                
+                for line in response.iter_lines():
+                    if line:
+                        json_response = json.loads(line)
+                        if 'error' in json_response:
+                            self.add_to_chat(f"Error: {json_response['error']}")
+                            self.add_to_chat("")
+                            break
+                        
+                        # Append new content and re-render the whole response
+                        current_response += json_response['response']
+                        
+                        # Clean up orphaned bullet points
+                        cleaned_response = self.clean_orphaned_bullet_points(current_response)
+                        
+                        # Update the chat display
+                        self.update_chat_response(cleaned_response, response_position)
+                
+            elif selected_server == "LM Studio":
+                response = requests.post(f'{self.server_endpoints["LM Studio"]}/v1/chat/completions', 
+                    json={
+                        'model': selected_model,
+                        'messages': [
+                            {"role": "system", "content": "You are a helpful assistant."},
+                            {"role": "user", "content": full_prompt}
+                        ],
+                        'stream': True,
+                        'temperature': 0.7
+                    },
+                    stream=True,
+                    headers={"Content-Type": "application/json"}
+                )
+                
+                for line in response.iter_lines():
+                    if line:
+                        # Skip empty lines and "[DONE]"
+                        if line == b"data: [DONE]":
+                            break
+                            
+                        if line.startswith(b"data: "):
+                            try:
+                                json_str = line[6:].decode('utf-8')  # Remove "data: " prefix
+                                if json_str.strip():
+                                    json_response = json.loads(json_str)
+                                    
+                                    if 'error' in json_response:
+                                        self.add_to_chat(f"Error: {json_response['error']}")
+                                        self.add_to_chat("")
+                                        break
+                                        
+                                    if 'choices' in json_response and json_response['choices']:
+                                        delta = json_response['choices'][0].get('delta', {})
+                                        content = delta.get('content', '')
+                                        
+                                        if content:
+                                            current_response += content
+                                            cleaned_response = self.clean_orphaned_bullet_points(current_response)
+                                            self.update_chat_response(cleaned_response, response_position)
+                            except json.JSONDecodeError:
+                                # Skip invalid JSON
+                                continue
             
-            # Add empty line after response with a paragraph break to isolate from future messages
+            # Add empty line after response with a paragraph break
             self.add_to_chat("")
             
-            # Add an explicit HTML separator to prevent continuation of lists
+            # Add an explicit HTML separator
             cursor = self.chat_display.textCursor()
             cursor.movePosition(QTextCursor.End)
             self.chat_display.setTextCursor(cursor)
             self.chat_display.insertHtml("<div style='margin-top:10px'></div>")
                     
         except Exception as e:
-            self.add_to_chat(f"Error: Could not connect to Ollama - {str(e)}")
+            self.add_to_chat(f"Error: Could not connect to {selected_server} - {str(e)}")
             self.add_to_chat("")
             
         finally:
             self.send_button.setEnabled(True)
+            
+    def update_chat_response(self, response_text, position):
+        """Update the chat response text at the given position"""
+        # Convert to HTML
+        html = markdown.markdown(
+            response_text, 
+            extensions=['fenced_code', 'tables', 'nl2br']
+        )
+        
+        # Explicitly close any open lists with a non-list element
+        if html.endswith("</li></ul>") or html.endswith("</li></ol>"):
+            html += "<div></div>"
+        
+        # Remove previous response and insert updated HTML
+        cursor = self.chat_display.textCursor()
+        cursor.setPosition(position)
+        cursor.movePosition(QTextCursor.End, QTextCursor.KeepAnchor)
+        cursor.removeSelectedText()
+        self.chat_display.setTextCursor(cursor)
+        self.chat_display.insertHtml(html)
+        
+        # Scroll to see latest content
+        self.chat_display.verticalScrollBar().setValue(
+            self.chat_display.verticalScrollBar().maximum()
+        )
+        
+        QApplication.processEvents()
 
     def clean_orphaned_bullet_points(self, text):
         """Clean up orphaned bullet points at the end of responses"""
