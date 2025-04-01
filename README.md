@@ -2,7 +2,7 @@
 
 ## Overview
 
-Dou (道) is a deceptively simple but powerful desktop application for knowledge organisation, note-taking, and mind mapping. The name "Dou" (道) means "way" or "path" in Japanese (Dao in Chinese and Do in Korean) reflecting the app's core idea of organising thoughts, ideas and data as text-based nodes along a path.
+Dou (道) is a deceptively simple but powerful desktop application for knowledge organisation, note-taking, and mind mapping. The name "Dou" means "way" or "path" in Japanese (Dao in Chinese and Do in Korean) reflecting the app's core idea of organising thoughts, ideas and data as text-based nodes along a path.
 
 A path can be anything you want it to be. Your daily diet, a mood or health tracker,  ideas for an app or business, a story outline, your goals ahead, or just random notes that you need help organising. You can have as many different paths you want on one canvas. Or you can create different canvases (saved as Dou files) for each path.
 
