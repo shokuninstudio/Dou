@@ -6,7 +6,7 @@ Dou (道) is a deceptively simple but powerful desktop application for knowledge
 
 A path can be anything you want it to be. Your daily diet, a mood or health tracker,  ideas for an app or business, a story outline, your goals ahead, or just random notes that you need help organising. You can have as many different paths you want on one canvas. Or you can create different canvases (saved as Dou files) for each path.
 
-After you have arranged text nodes in order and linked them up, ask your favourite Ollama hosted large language model for feedback, summaries and more.
+After you have arranged text nodes in order and linked them up, ask your favourite Ollama and LM Studio hosted large language model for feedback, summaries and more.
 
 [![temp-Image4-Weckl.avif](https://i.postimg.cc/FFqXxp9V/temp-Image4-Weckl.avif)](https://postimg.cc/s1pLjpGM)
 
@@ -26,7 +26,7 @@ After you have arranged text nodes in order and linked them up, ask your favouri
 ### AI-Powered Analysis
 * Integrated Chat Panel: Ask questions about your paths using natural language
 * Path Analysis: Analyse specific paths or all content with AI
-* Multiple Models: Connect to different Ollama AI models based on your needs
+* Multiple Models: Connect to different Ollama and LM Studio hosted models based on your needs
 
 ### Import and Export
 * Project Files: Save and load projects as .dou files to continue work later
@@ -59,7 +59,7 @@ After you have arranged text nodes in order and linked them up, ask your favouri
 Dou is built with:
 * PySide6 (Qt for Python) for the user interface
 * JSON-based file format for project persistence
-* Integration with Ollama for local AI model inference
+* Integration with Ollama and LM Studio for local AI model inference
 * Support for mouse, keyboard, and tablet input devices
 
 ## Getting Started
