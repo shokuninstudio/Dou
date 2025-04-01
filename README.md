@@ -60,7 +60,6 @@ Dou is built with:
 * PySide6 (Qt for Python) for the user interface
 * JSON-based file format for project persistence
 * Integration with Ollama and LM Studio for local AI model inference
-* Support for mouse, keyboard, and tablet input devices
 
 ## Getting Started
 1. Install PySide6 and Markdown support with 'pip install pyside6 markdown'
