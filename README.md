@@ -62,16 +62,17 @@ Dou is built with:
 * Integration with Ollama and LM Studio for local AI model inference
 
 ## Getting Started
-1. Install PySide6 and Markdown support with 'pip install pyside6 markdown'
-2. Launch Dou directly via the Terminal or build an executable for macOS, Windows or Linux with Pyinstaller
-3. Double-click anywhere on the canvas to create a new text node, double click a text node to edit them
-4. Import a text file as a node
-5. Type on a text node or in the text editor panel for longer texts
-6. Connect text nodes by dragging from the connection points
-7. Create groups (each one is a path) of text nodes with different colours to separate them visually
-8. Use the chat panel to analyse a path of text nodes
-9. Load and Save projects with one click
-10. Easy to remember controls. Standard Copy, Cut and Paste shortcuts. Right click to pan the canvas. Command/CTRL + or - to zoom in or out.
+1. Download the prebuilt binaries for macOS and Windows (Linux coming soon) or if you want to build your own follow steps 2 and 3 below.
+2. Install PySide6 and Markdown support with 'pip install pyside6 markdown'
+3. Launch Dou directly via the Terminal or build an executable for macOS, Windows or Linux with Pyinstaller
+4. Double-click anywhere on the canvas to create a new text node, double click a text node to edit them
+5. Import a text file as a node
+6. Type on a text node or in the text editor panel for longer texts
+7. Connect text nodes by dragging from the connection points
+8. Create groups (each one is a path) of text nodes with different colours to separate them visually
+9. Use the chat panel to analyse a path of text nodes
+10. Load and Save projects with one click
+11. Easy to remember controls. Standard Copy, Cut and Paste shortcuts. Right click to pan the canvas. Command/CTRL + or - to zoom in or out.
 
 ---
 *Dou by Shokunin Studio © 2025*
