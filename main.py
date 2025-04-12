@@ -65,9 +65,11 @@ class MainWindow(QMainWindow):
         self.text_viewer = TextViewer()
         self.content_splitter.addWidget(self.text_viewer)
         
-        # Connect node selection signal
+        # Connect node selection signal to text viewer
         self.canvas.node_selected.connect(self.text_viewer.display_node)
-        
+        # REMOVE connection to chat panel from here
+        # self.canvas.node_selected.connect(self.chat_panel.sync_color_selector_to_node)
+
         # Create vertical splitter for main content and chat
         self.vertical_splitter = QSplitter(Qt.Vertical)
         
@@ -77,7 +79,10 @@ class MainWindow(QMainWindow):
         # Create chat panel with canvas reference
         self.chat_panel = ChatPanel(self.canvas)
         self.vertical_splitter.addWidget(self.chat_panel)
-        
+
+        # Connect node selection signal to chat panel AFTER it's created
+        self.canvas.node_selected.connect(self.chat_panel.sync_color_selector_to_node)
+
         # Restore splitter states or set defaults
         content_state = self.settings.value('content_splitter_state')
         if content_state:
@@ -118,11 +123,13 @@ class MainWindow(QMainWindow):
     def save_project(self):
         filename, _ = QFileDialog.getSaveFileName(self, "Save Project", "", "Dou (*.dou)")
         if filename:
+            # Canvas now handles saving its own background color
             self.canvas.save_to_file(filename)
             
     def load_project(self):
         filename, _ = QFileDialog.getOpenFileName(self, "Load Project", "", "Dou (*.dou)")
         if filename:
+            # Canvas now handles loading its own background color
             self.canvas.load_from_file(filename)
             
     def export_markdown(self):

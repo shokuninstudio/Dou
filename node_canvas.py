@@ -76,6 +76,7 @@ class NodeCanvas(QGraphicsView):
         self.connections = []
         self.dragging_node = None
         self.temp_connection = None
+        self.selected_node = None # Initialize selected_node
 
         # Add zoom settings
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
@@ -98,10 +99,10 @@ class NodeCanvas(QGraphicsView):
         # Store gesture state
         self.last_gesture_factor = 1.0
         
-        # Set dark grey background
-        self.setBackgroundBrush(QColor(60, 60, 60))
-        self.scene.setBackgroundBrush(QColor(60, 60, 60))
-        
+        # Set default dark grey background and store it
+        self.background_color = QColor(60, 60, 60)
+        self.set_background_color(self.background_color)
+
         # Hide scrollbars but keep their functionality
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -131,7 +132,32 @@ class NodeCanvas(QGraphicsView):
         self.drag_offset = None  # Add this new variable
         self.last_tablet_click_time = 0  # Add this line only
         self.last_tablet_pos = None      # Add this line only
-    
+
+    def set_background_color(self, color):
+        """Sets the background color for the view and scene."""
+        self.background_color = color
+        self.setBackgroundBrush(self.background_color)
+        self.scene.setBackgroundBrush(self.background_color)
+        self.update() # Ensure the view redraws immediately
+
+    def clear_all_nodes(self):
+        """Remove all nodes and connections from the canvas."""
+        # Remove all connections first
+        for conn in self.connections[:]: # Iterate over a copy
+            self.scene.removeItem(conn)
+        self.connections.clear()
+
+        # Remove all nodes
+        nodes_to_remove = [item for item in self.scene.items() if isinstance(item, TextNode)]
+        for node in nodes_to_remove:
+            self.scene.removeItem(node)
+
+        # Reset node counter and selection
+        self.node_counter = 0
+        self.selected_node = None
+        self.scene.clearSelection()
+        self.scene.update() # Ensure the view reflects the changes
+
     def add_node(self, title, text):
         self.node_counter += 1  # Increment counter
         node = TextNode(title, text)
@@ -299,7 +325,12 @@ class NodeCanvas(QGraphicsView):
             project_data = {
                 'nodes': nodes_data,
                 'connections': connections_data,
-                'version': '1.0'  # For future compatibility
+                'background_color': [ # Store color as RGB list
+                    self.background_color.red(),
+                    self.background_color.green(),
+                    self.background_color.blue()
+                ],
+                'version': '1.1'  # Increment version for new feature
             }
             
             # Write to file
@@ -316,7 +347,7 @@ class NodeCanvas(QGraphicsView):
         """Load a project from a .dou file"""
         try:
             # Clear existing canvas
-            self.scene.clear()
+            self.clear_all_nodes() # Use the method to clear nodes/connections
             self.connections = []
             self.selected_node = None
             
@@ -326,6 +357,15 @@ class NodeCanvas(QGraphicsView):
             
             # Check version for compatibility
             version = project_data.get('version', '1.0')
+
+            # Load background color if present (version 1.1+)
+            if 'background_color' in project_data:
+                rgb = project_data['background_color']
+                loaded_color = QColor(rgb[0], rgb[1], rgb[2])
+                self.set_background_color(loaded_color)
+            else:
+                # Set default if loading older file
+                self.set_background_color(QColor(60, 60, 60))
             
             # Temporary dictionary to map saved node IDs to new node objects
             id_to_node = {}
@@ -566,7 +606,7 @@ class NodeCanvas(QGraphicsView):
             path.moveTo(start_pos)
             
             dx = self.temp_connection_end.x() - start_pos.x()
-            dy = self.temp_connection_end.y() - start_pos.y()
+            dy = self.temp_connection_end.y()
             
             ctrl1 = QPointF(start_pos.x() + dx/3, start_pos.y())
             ctrl2 = QPointF(start_pos.x() + 2*dx/3, self.temp_connection_end.y())

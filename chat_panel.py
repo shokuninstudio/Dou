@@ -50,8 +50,19 @@ class ChatPanel(QWidget):
         controls_layout.addWidget(QLabel("Colour Label:"))
         self.color_selector = QComboBox()
         self.color_selector.addItems(['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Light Grey'])
+        # Temporarily disconnect while syncing to avoid recursive updates
         self.color_selector.currentTextChanged.connect(self.update_node_color)
         controls_layout.addWidget(self.color_selector)
+
+        # Add Background Colour button
+        self.bg_color_button = QPushButton("Canvas Colour") # Renamed slightly for clarity
+        self.bg_color_button.clicked.connect(self.change_canvas_background)
+        controls_layout.addWidget(self.bg_color_button)
+
+        # Add Clear Canvas button
+        self.clear_canvas_button = QPushButton("Clear Canvas")
+        self.clear_canvas_button.clicked.connect(self.clear_canvas)
+        controls_layout.addWidget(self.clear_canvas_button)
         
         controls_layout.addStretch()
         layout.addLayout(controls_layout)
@@ -115,7 +126,18 @@ class ChatPanel(QWidget):
         
         # Initial model fetch
         self.fetch_models()
+
+        # Sync color selector initially if a node is selected
+        if self.canvas.selected_node:
+             self.sync_color_selector_to_node(self.canvas.selected_node)
         
+    def change_canvas_background(self):
+        """Open color dialog and change canvas background color."""
+        current_color = self.canvas.background_color
+        color = QColorDialog.getColor(current_color, self, "Choose Canvas Background Color")
+        if color.isValid():
+            self.canvas.set_background_color(color)
+
     def fetch_models(self):
         selected_server = self.server_selector.currentText()
         
@@ -446,12 +468,41 @@ Please analyze the provided text and answer the question. You can use markdown f
                     f"Failed to save chat: {str(e)}"
                 )
     
+    def sync_color_selector_to_node(self, node):
+        """Update the color selector based on the selected node's color."""
+        if node and hasattr(node, 'current_color'):
+            color_name = node.current_color
+            index = self.color_selector.findText(color_name)
+            if index != -1:
+                # Block signals temporarily to prevent update_node_color from firing
+                self.color_selector.blockSignals(True)
+                self.color_selector.setCurrentIndex(index)
+                self.color_selector.blockSignals(False)
+        # Optional: Handle case where no node is selected (e.g., reset index)
+        # else:
+        #     self.color_selector.blockSignals(True)
+        #     self.color_selector.setCurrentIndex(-1) # Or 0 for default
+        #     self.color_selector.blockSignals(False)
+
     def update_node_color(self, color_name):
         """Update the color of the selected node"""
         selected_nodes = [item for item in self.canvas.scene.selectedItems() 
                          if hasattr(item, 'set_color')]
         for node in selected_nodes:
             node.set_color(color_name)
+
+    def clear_canvas(self):
+        """Clear all nodes from the canvas."""
+        reply = QMessageBox.question(self, 'Clear Canvas', 
+                                     "Are you sure you want to delete all nodes from the canvas?",
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            if hasattr(self.canvas, 'clear_all_nodes'):
+                self.canvas.clear_all_nodes()
+                self.update_path_list() # Update path selector after clearing
+            else:
+                QMessageBox.warning(self, "Error", "Canvas does not support clearing all nodes.")
 
     def speak_text(self):
         """Speak the selected text or all text from chat display"""
