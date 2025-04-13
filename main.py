@@ -107,7 +107,7 @@ class MainWindow(QMainWindow):
         self.setStatusBar(self.statusBar)
         
         # Create copyright label
-        copyright_label = QLabel("Dou by Shokunin Studio © 2025")
+        copyright_label = QLabel("Dou version 1.1 by Shokunin Studio © 2025")
         # Use a smaller font
         font = copyright_label.font()
         font.setPointSize(12)
