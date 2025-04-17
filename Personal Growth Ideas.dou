@@ -1,0 +1,97 @@
+{
+  "nodes": {
+    "4404899584": {
+      "title": "Mindset & Motivation",
+      "text": "Mindset & Motivation\n\n\u2022 Growth mindset, positivity, resilience",
+      "pos_x": 393.0,
+      "pos_y": 157.75,
+      "width": 250,
+      "height": 300,
+      "color": "Purple",
+      "order_number": 6
+    },
+    "4395383936": {
+      "title": "Relationships",
+      "text": "Relationships\n\n\u2022 Family, friends, communication, empathy",
+      "pos_x": -229.25,
+      "pos_y": 368.0,
+      "width": 250,
+      "height": 300,
+      "color": "Green",
+      "order_number": 5
+    },
+    "4406910336": {
+      "title": "Habits & Discipline",
+      "text": "Habits & Discipline\n\n\u2022 Morning routine, time management, journaling",
+      "pos_x": -792.0,
+      "pos_y": 181.0,
+      "width": 250,
+      "height": 300,
+      "color": "Light Grey",
+      "order_number": 4
+    },
+    "4406908544": {
+      "title": "Career Development",
+      "text": "Career Development\n\t\n\u2022 Goal setting, networking, skill improvement",
+      "pos_x": 393.6250000000001,
+      "pos_y": -410.00000000000006,
+      "width": 250,
+      "height": 300,
+      "color": "Blue",
+      "order_number": 3
+    },
+    "4406910400": {
+      "title": "Learning & Education",
+      "text": "Learning & Education\n\n\u2022 Books, courses, new skills, languages",
+      "pos_x": -246.0,
+      "pos_y": -488.5,
+      "width": 250,
+      "height": 300,
+      "color": "Orange",
+      "order_number": 2
+    },
+    "4407175552": {
+      "title": "Central Topic: Personal Growth",
+      "text": "Central Topic: Personal Growth\t\n\nHealth & Wellness\n\n\u2022 Exercise, nutrition, sleep, mental health",
+      "pos_x": -834.0625000000001,
+      "pos_y": -403.93750000000006,
+      "width": 250,
+      "height": 300,
+      "color": "Red",
+      "order_number": 1
+    }
+  },
+  "connections": [
+    {
+      "start_node": "4407175552",
+      "end_node": "4406910400",
+      "edge_type": "right"
+    },
+    {
+      "start_node": "4406910400",
+      "end_node": "4406908544",
+      "edge_type": "right"
+    },
+    {
+      "start_node": "4406908544",
+      "end_node": "4406910336",
+      "edge_type": "right"
+    },
+    {
+      "start_node": "4406910336",
+      "end_node": "4395383936",
+      "edge_type": "right"
+    },
+    {
+      "start_node": "4395383936",
+      "end_node": "4404899584",
+      "edge_type": "right"
+    }
+  ],
+  "background_color": [
+    53,
+    74,
+    96
+  ],
+  "version": "1.1"
+}
