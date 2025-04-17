@@ -1,5 +1,7 @@
 # Dou (道) - AI powered analysis and feedback for notes and mind maps
 
+[![temp-Image-Es-Yt-M1.avif](https://i.postimg.cc/cH6gtxkb/temp-Image-Es-Yt-M1.avif)](https://postimg.cc/Q9GxR33Q)
+
 ## Overview
 
 Dou (道) is a deceptively simple but powerful desktop application for knowledge organisation, note-taking, and mind mapping. The name "Dou" means "way" or "path" in Japanese (Dao in Chinese and Do in Korean) reflecting the app's core idea of organising thoughts, ideas and data as text-based nodes along a path.
@@ -8,7 +10,15 @@ A path can be anything you want it to be. Your daily diet, a mood or health trac
 
 After you have arranged text nodes in order and linked them up, ask your favourite Ollama and LM Studio hosted large language model for feedback, summaries and more.
 
-[![temp-Image4-Weckl.avif](https://i.postimg.cc/FFqXxp9V/temp-Image4-Weckl.avif)](https://postimg.cc/s1pLjpGM)
+[![temp-Image20-Mmrv.avif](https://i.postimg.cc/kMBhNLVr/temp-Image20-Mmrv.avif)](https://postimg.cc/G9nQd7Jz)
+
+[![temp-Image-PCWm-T2.avif](https://i.postimg.cc/4y9Yw8gv/temp-Image-PCWm-T2.avif)](https://postimg.cc/xN9j13qq)
+
+[![temp-Image-Qa9fe-B.avif](https://i.postimg.cc/SjbJPWSB/temp-Image-Qa9fe-B.avif)](https://postimg.cc/q6QJh6Cw)
+
+[![temp-Imageu2-Q7r-D.avif](https://i.postimg.cc/DZDWq9ty/temp-Imageu2-Q7r-D.avif)](https://postimg.cc/R67VmDSj)
+
+[![temp-Imageiq9-Jr-P.avif](https://i.postimg.cc/tRwvBDPs/temp-Imageiq9-Jr-P.avif)](https://postimg.cc/3WjZRXth)
 
 ## Features
 
