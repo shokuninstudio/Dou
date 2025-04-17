@@ -85,7 +85,7 @@ Dou is built with:
 
 ## Upcoming changes in version 1.2
 * Windows dark mode fixes
-* Windows icon
+* Embed application icon in the binary
 
 ---
 *Dou by Shokunin Studio © 2025*
