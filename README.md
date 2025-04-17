@@ -83,7 +83,7 @@ Dou is built with:
 9. Load and Save projects with one click
 10. Easy to remember controls. Standard Copy, Cut and Paste shortcuts. Right click to pan the canvas. Command/CTRL + or - to zoom in or out.
 
-## Upcoming changes in version 1.3
+## Upcoming changes in version 1.2
 * Windows dark mode fixes
 * Windows icon
 
