@@ -85,7 +85,7 @@ Dou is built with:
 11. Easy to remember controls. Standard Copy, Cut and Paste shortcuts. Right click to pan the canvas. Command/CTRL + or - to zoom in or out.
 
 ## Upcoming changes in version 1.2
-* Windows dark mode fixes
+* Windows dark mode fixes (currently Stickies text can become white in dark mode)
 * Embed application icon in the binary
 
 ---
