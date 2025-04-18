@@ -84,9 +84,11 @@ Dou is built with:
 10. Load and Save projects with one click
 11. Easy to remember controls. Standard Copy, Cut and Paste shortcuts. Right click to pan the canvas. Command/CTRL + or - to zoom in or out.
 
-## Upcoming changes in version 1.2
-* Windows dark mode fixes (currently Stickies text can become white in dark mode)
+## Roadmap ahead
+* Minor Windows dark mode fixes (currently Stickies text can become white in dark mode)
 * Embed application icon in the binary
+* Icon for Dou files
+* Notarisation / app signing
 
 ---
 *Dou by Shokunin Studio © 2025*
