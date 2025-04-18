@@ -103,22 +103,15 @@ class MainWindow(QMainWindow):
         self.setup_shortcuts()
 
         # Add copyright label to status bar
-        self.statusBar = QStatusBar()
-        self.setStatusBar(self.statusBar)
-        
-        # Create copyright label
-        copyright_label = QLabel("Dou version 1.1 by Shokunin Studio © 2025")
-        # Use a smaller font
-        font = copyright_label.font()
+        credits_label = QLabel("Dou version 1.1 by Shokunin Studio © 2025")
+        font = credits_label.font()
         font.setPointSize(12)
-        copyright_label.setFont(font)
-        # Set light gray color
-        copyright_label.setStyleSheet("color: #000000;")
+        credits_label.setFont(font)
         
-        # Add to right side of status bar
-        self.statusBar.addPermanentWidget(copyright_label)
-        # Remove the default border of status bar
-        self.statusBar.setStyleSheet("QStatusBar::item {border: none;}")
+        # Add to right side of status bar without setting explicit colors
+        status_bar = self.statusBar()
+        status_bar.addPermanentWidget(credits_label)
+        status_bar.setStyleSheet("QStatusBar::item {border: none;}")
 
     def save_project(self):
         filename, _ = QFileDialog.getSaveFileName(self, "Save Project", "", "Dou (*.dou)")
